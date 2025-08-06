@@ -33,7 +33,7 @@ body {
 .navbar nav a {
   margin-left: 20px;
   text-decoration: none;
-  color: #333;
+  color: #c4c1c1;
   font-weight: 500;
   transition: color 0.3s;
 }
@@ -62,7 +62,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 250, 244, 0.3);
+  background: rgba(243, 202, 204, 0.3);
   z-index: 1;
 }
 
@@ -102,7 +102,7 @@ footer {
   text-align: center;
   padding: 20px;
   background-color: transparent;
-  color: #888;
+  color: #ffffff;
   position: relative;
   z-index: 2;
   margin-top: -80px;
@@ -157,6 +157,10 @@ footer {
   font-size: 14px;
   color: #777;
   margin-bottom: 10px;
+}
+.product-card button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .price {
@@ -279,4 +283,53 @@ footer {
 
 .faq-box p {
   color: #666;
+}
+.login-body {
+  background-color: #fffaf4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+  background: #fff;
+  background-size: cover;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #ff8a5c;
+  margin-bottom: 20px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.login-container button {
+  background-color: #ff8a5c;
+  color: #fff;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover {
+  background-color: #e66f3e;
 }
