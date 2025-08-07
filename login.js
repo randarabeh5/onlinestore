@@ -12,4 +12,3 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     error.textContent = "Invalid username or password.";
   }
 });
-
