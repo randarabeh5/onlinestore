@@ -1,92 +1,54 @@
-const products = [
-  {
-    name: "Wireless Headphones",
-    description: "Crystal clear sound with noise cancellation.",
-    price: "$99.00",
-    image: "pic_8.jpg",
-    quantity: 3
-  },
-  {
-    name: "Smart Watch",
-    description: "Track your fitness and stay connected.",
-    price: "$149.00",
-    image: "pic_7.jpg",
-    quantity: 2
-  },
-  {
-    name: "Bluetooth Speaker",
-    description: "Rich bass and portable design.",
-    price: "$59.00",
-    image: "pic_6.jpg",
-    quantity: 1
-  },
-  {
-    name: "Gaming Mouse",
-    description: "Ultra precision with customizable RGB lighting.",
-    price: "$39.00",
-    image: "pic_5.jpg",
-    quantity: 0
-  },
-  {
-    name: "4K Monitor",
-    description: "27‑inch UHD display with vivid colors.",
-    price: "$329.00",
-    image: "pic_4.jpg",
-    quantity: 4
-  },
-  {
-    name: "Mechanical Keyboard",
-    description: "Blue switches with customizable RGB backlight.",
-    price: "$89.00",
-    image: "pic_3.jpg",
-    quantity: 2
-  },
-  {
-    name: "Fitness Tracker",
-    description: "Monitor your health and activity with this lightweight and waterproof tracker.",
-    price: "$49.00",
-    image: "pic_1.jpg",
-    quantity: 3
-  },
-  {
-    name: "Tablet Device",
-    description: "Portable and powerful, perfect for all-day use.",
-    price: "$199.00",
-    image: "pic_2.jpg",
-    quantity: 5
-  }
-];
 
-const container = document.getElementById("products-container");
+const apiURL = "https://6894c8f2be3700414e1482a4.mockapi.io/products";
 
-products.forEach((product, index) => {
-  const card = document.createElement("div");
-  card.className = "product-card";
+const productsContainer = document.querySelector(".products-grid");
 
-  let isOutOfStock = product.quantity === 0;
 
-  card.innerHTML = `
-    <img src="${product.image}" alt="${product.name}">
-    <h2>${product.name}</h2>
-    <p>${product.description}</p>
-    <span class="price">${product.price}</span>
-    <p class="stock-status">${isOutOfStock ? "<strong style='color:red'>Out of Stock</strong>" : `In Stock: <span id="qty-${index}">${product.quantity}</span>`}</p>
-    <button ${isOutOfStock ? "disabled" : ""} onclick="buyProduct(${index})">Buy</button>
-  `;
+fetch(apiURL)
+  .then(response => response.json())
+  .then(products => {
+    productsContainer.innerHTML = ""; 
 
-  container.appendChild(card);
-});
+    products.forEach(product => {
+     
+      const stockText = product.stock > 0
+        ? `<span class="price">${product.price}$</span><p>In Stock: ${product.stock}</p><button onclick="buyProduct(${product.id})">Buy</button>`
+        : `<p style="color:red;font-weight:bold;">Out of Stock</p>`;
 
-function buyProduct(index) {
-  if (products[index].quantity > 0) {
-    products[index].quantity -= 1;
-    const qtySpan = document.getElementById(`qty-${index}`);
-    if (products[index].quantity === 0) {
-      qtySpan.parentElement.innerHTML = "<strong style='color:red'>Out of Stock</strong>";
-      event.target.disabled = true;
-    } else {
-      qtySpan.innerText = products[index].quantity;
-    }
-  }
+   
+      const productCard = `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h2>${product.name}</h2>
+          <p>${product.description}</p>
+          ${stockText}
+        </div>
+      `;
+      productsContainer.innerHTML += productCard;
+    });
+  })
+  .catch(error => {
+    console.error("Error fetching products:", error);
+  });
+
+
+function buyProduct(id) {
+  fetch(`${apiURL}/${id}`)
+    .then(res => res.json())
+    .then(product => {
+      if (product.stock > 0) {
+        const newStock = product.stock - 1;
+
+        fetch(`${apiURL}/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ stock: newStock })
+        })
+        .then(() => {
+          location.reload();
+        });
+      }
+    });
 }
-
